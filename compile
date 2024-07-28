@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Check for the source file argument
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <source_file.c>"
+    exit 1
+fi
+
+SOURCE_FILE="$1"
+
+clang-format-16 -i -style=WebKit "$SOURCE_FILE"
+
+BINARY_NAME=$(basename "$SOURCE_FILE" .c)
+if gcc -Wall -Wextra -o "bin/$BINARY_NAME" "$SOURCE_FILE"; then
+    "./bin/$BINARY_NAME"
+else
+    echo "Compilation failed. Check for errors in your C code."
+fi
